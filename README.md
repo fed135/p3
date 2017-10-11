@@ -97,7 +97,7 @@ ID | Code | Description
 
 ### Entity Event
 
-̀```
+```
 {
     id: <uuid> 
     ts: <timestamp>
