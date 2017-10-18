@@ -6,6 +6,8 @@ An RPC protocol for distributed pub/sub using [Kalm](https://github.com/Kalm) an
 
 For simplicity, it will be referred to as "p3".
 
+**Collaborators wanted**
+
 
 ## Components
 
