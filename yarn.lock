@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+compactr@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/compactr/-/compactr-2.2.1.tgz#eda91138deeea5e1b2fb7452ee0e4e7e75e0a517"
+
 debug@^3.0.0:
   version "3.1.0"
   resolved "http://artifactory.shuttercorp.net/artifactory/api/npm/npm-composite/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"

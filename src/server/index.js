@@ -9,39 +9,41 @@ const Schemas = require('../common/schemas');
 const Dispatcher = require('../common/dispatcher');
 const Logger = require('../common/logger');
 const defaults = require('./defaults');
+const iv = require('../common/iv');
 
 /* Methods -------------------------------------------------------------------*/
 
-function Server(scope = {}) {
-    function start(opts = {}) {
-        opts = Object.assign(opts, defaults);
-        scope.server = Kalm.listen({
-            port: opts.port,
-            profile: { tick: opts.tick }
-        });
-        const dispatch = Dispatcher(scope);
-        scope.logger = Logger({ node: scope.server.id });
-        if (!opts.isSeed) {
-            return new Promise((resolveClient) => {
-                scope.logger.log(`Connecting to seed host ${opts.seedHost}:${opts.seedPort}`);
-                scope.seedNode = Kalm.connect({ host: opts.seedHost, port: opts.seedPort });
-                scope.seedNode.on('connect', () => {
-                    scope.logger.log(`Connected to seed host`);
-                    scope.seedNode.subscribe(0, dispatch.handleGossip);
-                    resolveClient(scope);
-                });
+function Server(scope) {
+    return iv.compose(scope, (ref) => [{
+        schemas: Schemas(ref),
+        start: (opts = {}) => {
+            opts = Object.assign(opts, defaults);
+            ref.server = Kalm.listen({
+                port: opts.port,
+                profile: { tick: opts.tick }
             });
+            
+            if (!opts.isSeed) {
+                return new Promise((resolveClient) => {
+                    ref.logger.log(`Connecting to seed host ${opts.seedHost}:${opts.seedPort}`);
+                    ref.seedNode = Kalm.connect({ host: opts.seedHost, port: opts.seedPort });
+                    ref.seedNode.on('connect', () => {
+                        ref.logger.log(`Connected to seed host`);
+                        ref.seedNode.subscribe(0, ref.dispatch.handleGossip);
+                        resolveClient(ref);
+                    });
+                });
+            }
+
+            ref.server.on('connection', (client) => {
+                client.subscribe(1, ref.dispatch.handleRequest);
+            })
+            return Promise.resolve(ref);
         }
-
-        scope.server.on('connection', (client) => {
-            client.subscribe(1, dispatch.handleRequest);
-        })
-        return Promise.resolve(scope);
-    }
-    
-    scope.schemas = Schemas(scope);
-
-    return Object.assign(scope, { start });
+    }, {
+        dispatch: Dispatcher(ref),
+        logger: Logger(scope)
+    }]);
 }
 
 /* Exports -------------------------------------------------------------------*/

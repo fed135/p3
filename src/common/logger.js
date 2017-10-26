@@ -5,36 +5,25 @@
 /* Requires ------------------------------------------------------------------*/
 
 const LRTimer = require('./lrtimer');
+const iv = require('./iv');
 
 /* Local variables -----------------------------------------------------------*/
 
-const timer = LRTimer();
+const timer = LRTimer().step();
 
-function Logger(scope={}) {
-    const stdOut = scope.stdOut || process.stdout;
-    const stdErr = scope.stdErr || process.stderr;
-
-    function log(msg) {
-        return _wrap(stdOut, 'log', msg);
-    }
-
-    function warn(msg) {
-        return _wrap(stdOut, 'warn', msg);
-    }
-
-    function error(msg) {
-        return _wrap(stdErr, 'err', msg);
-    }
-
-    function exception(err) {
-        return _wrap(err);
-    }
-
-    function _wrap(out, level, msg) {
-        return out.write(JSON.stringify({ node: scope.id, level, msg, timestamp: timer.read() }) + '\n');
-    }
-
-    return { log, warn, error, exception };
+function Logger(scope = {}) {
+    return iv.compose(scope, (ref) => [{
+        log: (msg) => ref._wrap(ref.stdOut, 'log', msg),
+        warn: (msg) => ref._wrap(ref.stdOut, 'warn', msg),
+        error: (msg) => ref._wrap(ref.stdErr, 'error', msg),
+        exception: (err) => ref._wrap(ref.stdErr, 'critical', err),
+    }, {
+        stdOut: scope.stdOut || process.stdout,
+        stdErr: scope.stdErr || process.stderr,
+        _wrap: (out, level, msg) => {
+            return out.write(JSON.stringify({ node: scope.name, level, msg, timestamp: timer.read() }) + '\n');
+        }
+    }]);
 }
 
 /* Exports -------------------------------------------------------------------*/

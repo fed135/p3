@@ -9,37 +9,37 @@ const Schemas = require('../common/schemas');
 const Dispatcher = require('../common/dispatcher');
 const Logger = require('../common/logger');
 const defaults = require('./defaults');
+const iv = require('../common/iv');
 
 /* Methods -------------------------------------------------------------------*/
 
 function Client(scope = { isActive: false }) {
-    function connect(opts = {}) {
-        opts = Object.assign(opts, defaults);
-        scope.handle = Kalm.connect({
-            port: opts.port,
-            profile: { tick: opts.tick }
-        });
-        scope.logger = Logger({ node: scope.handle.id });
-        return new Promise((resolveClient) => {
-            scope.handle.on('connect', () => {
-                scope.handle.subscribe(1, dispatcher.handleRequest);
-                beginHandshake();
-                resolveClient(scope);
+    return iv.compose(scope, (ref) => [{
+        schemas: Schemas(ref),
+        connect: (opts = {}) => {
+            opts = Object.assign(opts, defaults);
+            ref.handle = Kalm.connect({
+                port: opts.port,
+                profile: { tick: opts.tick }
             });
-        });
-    }
-
-    function beginHandshake() {
-        dispatcher.write(scope.handle, 'rpc_hs', 0, {
-            active: !!(scope.isActive),
-            encrypt: false
-        });
-    }
-
-    const dispatcher = Dispatcher(scope);
-    scope.schemas = Schemas(scope);
-
-    return Object.assign(scope, { connect });
+            return new Promise((resolveClient) => {
+                ref.handle.on('connect', () => {
+                    ref.handle.subscribe(1, ref.dispatch.handleRequest);
+                    ref.beginHandshake();
+                    resolveClient(ref);
+                });
+            });
+        }
+    }, {
+        logger: Logger(scope),
+        dispatch: Dispatcher(ref),
+        beginHandshake: () => {
+            ref.dispatch.write(ref.handle, 'rpc_hs', 0, {
+                active: !!(ref.isActive),
+                encrypt: false
+            });
+        }
+    }]);
 }
 
 /* Exports -------------------------------------------------------------------*/

@@ -5,23 +5,22 @@
 /* Requires ------------------------------------------------------------------*/
 
 const Compactr = require('compactr');
+const iv = require('./iv');
 
 /* Methods -------------------------------------------------------------------*/
 
 function Dispatcher(scope) {
-    function handleRequest(frame) {
-        console.log('request',frame);
-    }
-
-    function handleGossip(frame) {
-        console.log('gossip',frame);
-    }
-
-    function write(handle, schema, channel, data) {
-        return handle.write(channel, scope.schemas.get(schema).write(data))
-    }
-
-    return { handleRequest, handleGossip, write };
+    return iv.compose(scope, (ref) => [{
+        handleRequest: (frame) => {
+            console.log('request',frame);
+        },
+        handleGossip: (frame) => {
+            console.log('gossip',frame);
+        },
+        write: (handle, schema, channel, data) => {
+            return handle.write(channel, scope.schemas.get(schema).write(data))
+        }
+    }]);
 }
 
 /* Exports -------------------------------------------------------------------*/

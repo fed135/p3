@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/fed135/p3#readme",
   "dependencies": {
+    "compactr": "^2.2.1",
     "kalm": "^2.4.0"
   }
 }
