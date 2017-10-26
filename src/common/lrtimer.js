@@ -9,7 +9,7 @@ const iv = require('./iv');
 /* Methods -------------------------------------------------------------------*/
 
 function LRTimer(scope = {}) {
-    return iv.compose(scope, (ref) => [{
+    return iv.compose((ref) => [{
         read: () => ref.val
     }, {
         val: 0,

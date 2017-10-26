@@ -41,6 +41,8 @@ function Server(scope) {
             return Promise.resolve(ref);
         }
     }, {
+        server: null,
+        seedNode: null,
         dispatch: Dispatcher(ref),
         logger: Logger(scope)
     }]);

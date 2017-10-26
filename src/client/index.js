@@ -31,6 +31,7 @@ function Client(scope = { isActive: false }) {
             });
         }
     }, {
+        handle: null,
         logger: Logger(scope),
         dispatch: Dispatcher(ref),
         beginHandshake: () => {

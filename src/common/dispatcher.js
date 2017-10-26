@@ -10,7 +10,7 @@ const iv = require('./iv');
 /* Methods -------------------------------------------------------------------*/
 
 function Dispatcher(scope) {
-    return iv.compose(scope, (ref) => [{
+    return iv.compose((ref) => [{
         handleRequest: (frame) => {
             console.log('request',frame);
         },

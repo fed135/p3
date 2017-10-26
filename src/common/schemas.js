@@ -10,7 +10,7 @@ const iv = require('./iv');
 /* Methods -------------------------------------------------------------------*/
 
 function Schemas(scope) {
-    return iv.compose(scope, (ref) => [{
+    return iv.compose((ref) => [{
         get: (name) => {
             // TODO
             return ref.build(name);

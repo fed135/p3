@@ -12,7 +12,7 @@ const iv = require('./iv');
 const timer = LRTimer().step();
 
 function Logger(scope = {}) {
-    return iv.compose(scope, (ref) => [{
+    return iv.compose((ref) => [{
         log: (msg) => ref._wrap(ref.stdOut, 'log', msg),
         warn: (msg) => ref._wrap(ref.stdOut, 'warn', msg),
         error: (msg) => ref._wrap(ref.stdErr, 'error', msg),
