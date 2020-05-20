@@ -1,0 +1,50 @@
+{
+    "name": "@p3/client",
+    "version": "1.0.0",
+    "description": "An event emitter for entity state over network",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/fed135/p3.js.git"
+    },
+    "author": "frederic charette <fredericcharette@gmail.com>",
+    "license": "Apache-2.0",
+    "bugs": {
+      "url": "https://github.com/p3/p3-js/issues"
+    },
+    "homepage": "https://p3.js.org",
+    "contributors": [
+      "frederic charette <fredericcharette@gmail.com>"
+    ],
+    "typings": "./types.d.ts",
+    "husky": {
+      "hooks": {
+        "pre-commit": "yarn lint"
+      }
+    },
+    "funding": {
+      "type": "Github",
+      "url": "https://github.com/sponsors/fed135"
+    },
+    "dependencies": {
+      "kalm": "^3.2.3",
+      "compactr": "^2.4.1"
+    },
+    "devDependencies": {
+      "@types/jest": "^24.0.17",
+      "@types/node": "^12.12.0",
+      "@typescript-eslint/eslint-plugin": "^2.9.0",
+      "@typescript-eslint/parser": "^2.9.0",
+      "eslint": "^6.7.0",
+      "eslint-config-airbnb-base": "^14.0.0",
+      "eslint-plugin-import": "^2.18.0",
+      "husky": "^3.1.0",
+      "jest": "^24.9.0",
+      "ts-jest": "^24.2.0",
+      "typescript": "^3.7.2"
+    }
+  }
+  

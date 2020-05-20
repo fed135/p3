@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "moduleResolution": "node",
+        "esModuleInterop": false,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "allowJs": true,
+        "target": "es2019",
+        "outDir": "dist"
+    },
+    "include": [
+        "./packages",
+        "./src",
+        "./types.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.js"
+    ]
+}

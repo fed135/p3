@@ -1,0 +1,4 @@
+*.js
+examples
+node_modules
+scripts

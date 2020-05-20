@@ -1,0 +1,1 @@
+import { client } from '@p3/client';
